@@ -111,49 +111,108 @@ body {
 
 #controls {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  padding: 20px;
   background-color: #2a2a2a;
   border: 2px solid #444;
   margin-bottom: 5px;
 }
 
-.control-row {
+#gamepad {
   display: flex;
-  gap: 5px;
-  margin: 2px 0;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
 }
 
-.control-btn {
-  width: 50px;
-  height: 50px;
-  font-size: 20px;
-  font-weight: bold;
-  background-color: #444;
-  color: #fff;
+#dpad {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#dpad-outer {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #3a3a3a, #1a1a1a);
+  border: 3px solid #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 2px 2px 10px rgba(0, 0, 0, 0.5), 
+              inset -2px -2px 10px rgba(255, 255, 255, 0.1);
+}
+
+#dpad-inner {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #4a4a4a, #2a2a2a);
   border: 2px solid #666;
-  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  touch-action: none;
+  user-select: none;
+}
+
+#dpad-stick {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #666, #444);
+  border: 2px solid #777;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.1s ease;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+#dpad-stick.active {
+  background: linear-gradient(145deg, #888, #666);
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+#action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.action-btn {
+  width: 60px;
+  height: 60px;
+  font-size: 24px;
+  font-weight: bold;
+  background: linear-gradient(145deg, #cc4444, #aa2222);
+  color: #fff;
+  border: 3px solid #dd5555;
+  border-radius: 50%;
   cursor: pointer;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3),
+              inset 1px 1px 3px rgba(255, 255, 255, 0.2);
+  transition: all 0.1s ease;
 }
 
-.control-btn:active {
-  background-color: #666;
+.action-btn:active {
+  background: linear-gradient(145deg, #aa2222, #882222);
   transform: scale(0.95);
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5),
+              inset 2px 2px 6px rgba(0, 0, 0, 0.3);
 }
 
-.control-btn:hover {
-  background-color: #555;
-}
-
-#actionBtn {
-  background-color: #cc4444;
-}
-
-#actionBtn:active {
-  background-color: #aa2222;
+.action-btn:hover {
+  background: linear-gradient(145deg, #dd5555, #bb3333);
 }
 
 #messageLog {
@@ -210,14 +269,29 @@ body {
   }
 
   #controls {
-    padding: 5px;
+    padding: 15px;
     margin-bottom: 3px;
   }
 
-  .control-btn {
-    width: 40px;
-    height: 40px;
-    font-size: 16px;
+  #dpad-outer {
+    width: 100px;
+    height: 100px;
+  }
+
+  #dpad-inner {
+    width: 75px;
+    height: 75px;
+  }
+
+  #dpad-stick {
+    width: 25px;
+    height: 25px;
+  }
+
+  .action-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
   }
 
   #messageLog {
@@ -246,10 +320,10 @@ body {
     min-height: 20px;
   }
 
-  .control-btn {
-    width: 60px;
-    height: 60px;
-    font-size: 24px;
+  .action-btn {
+    width: 70px;
+    height: 70px;
+    font-size: 28px;
   }
 
   #gameStats {

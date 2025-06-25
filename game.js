@@ -274,17 +274,8 @@ class Game {
   }
 
   setupControls() {
-    // Touch controls
-    const controlBtns = document.querySelectorAll(
-      ".control-btn[data-direction]"
-    );
-    controlBtns.forEach((btn) => {
-      btn.addEventListener("click", (e) => {
-        e.preventDefault();
-        const direction = btn.dataset.direction;
-        this.movePlayer(direction);
-      });
-    });
+    // Gamepad controls
+    this.setupGamepad();
 
     // Action button
     const actionBtn = document.getElementById("actionBtn");
@@ -323,6 +314,119 @@ class Game {
           break;
       }
     });
+  }
+
+  setupGamepad() {
+    const dpadInner = document.getElementById("dpad-inner");
+    const dpadStick = document.getElementById("dpad-stick");
+    
+    if (!dpadInner || !dpadStick) return;
+
+    let isDragging = false;
+    let startPos = { x: 0, y: 0 };
+    let centerPos = { x: 0, y: 0 };
+    let moveThreshold = 25; // Distance threshold for movement
+    let lastMoveTime = 0;
+    let moveDelay = 200; // Delay between moves in milliseconds
+
+    // Get center position of the dpad
+    const updateCenterPos = () => {
+      const rect = dpadInner.getBoundingClientRect();
+      centerPos.x = rect.left + rect.width / 2;
+      centerPos.y = rect.top + rect.height / 2;
+    };
+
+    // Initialize center position
+    updateCenterPos();
+    window.addEventListener("resize", updateCenterPos);
+
+    // Touch events
+    const handleStart = (e) => {
+      e.preventDefault();
+      isDragging = true;
+      
+      const touch = e.touches ? e.touches[0] : e;
+      startPos.x = touch.clientX;
+      startPos.y = touch.clientY;
+      
+      dpadStick.classList.add("active");
+      updateCenterPos();
+    };
+
+    const handleMove = (e) => {
+      if (!isDragging) return;
+      e.preventDefault();
+
+      const touch = e.touches ? e.touches[0] : e;
+      const deltaX = touch.clientX - centerPos.x;
+      const deltaY = touch.clientY - centerPos.y;
+      
+      // Limit stick movement to circle boundary
+      const maxDistance = 30; // Maximum stick movement from center
+      const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+      
+      let finalX = deltaX;
+      let finalY = deltaY;
+      
+      if (distance > maxDistance) {
+        finalX = (deltaX / distance) * maxDistance;
+        finalY = (deltaY / distance) * maxDistance;
+      }
+      
+      // Update stick position
+      dpadStick.style.transform = `translate(calc(-50% + ${finalX}px), calc(-50% + ${finalY}px))`;
+      
+      // Check for movement commands
+      const now = Date.now();
+      if (now - lastMoveTime > moveDelay && distance > moveThreshold) {
+        const angle = Math.atan2(deltaY, deltaX);
+        const direction = this.getDirectionFromAngle(angle);
+        
+        if (direction) {
+          this.movePlayer(direction);
+          lastMoveTime = now;
+        }
+      }
+    };
+
+    const handleEnd = (e) => {
+      if (!isDragging) return;
+      e.preventDefault();
+      
+      isDragging = false;
+      dpadStick.classList.remove("active");
+      
+      // Reset stick position
+      dpadStick.style.transform = "translate(-50%, -50%)";
+    };
+
+    // Add event listeners for touch
+    dpadInner.addEventListener("touchstart", handleStart, { passive: false });
+    document.addEventListener("touchmove", handleMove, { passive: false });
+    document.addEventListener("touchend", handleEnd, { passive: false });
+
+    // Add event listeners for mouse (for desktop testing)
+    dpadInner.addEventListener("mousedown", handleStart);
+    document.addEventListener("mousemove", handleMove);
+    document.addEventListener("mouseup", handleEnd);
+  }
+
+  getDirectionFromAngle(angle) {
+    // Convert radians to degrees and normalize
+    let degrees = (angle * 180 / Math.PI + 360) % 360;
+    
+    // Define direction ranges (45 degrees each)
+    if (degrees >= 315 || degrees < 45) {
+      return "right";
+    } else if (degrees >= 45 && degrees < 135) {
+      return "down";
+    } else if (degrees >= 135 && degrees < 225) {
+      return "left";
+    } else if (degrees >= 225 && degrees < 315) {
+      return "up";
+    }
+    
+    return null;
   }
 
   movePlayer(direction) {
