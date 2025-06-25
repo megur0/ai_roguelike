@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Roguelike</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div id="gameContainer">
+        <div id="gameStats">
+            <div class="stat">
+                <span>HP: </span>
+                <span id="playerHP">100</span>
+                <span>/</span>
+                <span id="playerMaxHP">100</span>
+            </div>
+            <div class="stat">
+                <span>Level: </span>
+                <span id="playerLevel">1</span>
+            </div>
+            <div class="stat">
+                <span>XP: </span>
+                <span id="playerXP">0</span>
+            </div>
+            <div class="stat">
+                <span>Floor: </span>
+                <span id="currentFloor">1</span>
+            </div>
+        </div>
+
+        <div id="gameBoard"></div>
+
+        <div id="controls">
+            <div class="control-row">
+                <button class="control-btn" data-direction="up">↑</button>
+            </div>
+            <div class="control-row">
+                <button class="control-btn" data-direction="left">←</button>
+                <button class="control-btn" id="actionBtn">⚔</button>
+                <button class="control-btn" data-direction="right">→</button>
+            </div>
+            <div class="control-row">
+                <button class="control-btn" data-direction="down">↓</button>
+            </div>
+        </div>
+
+        <div id="messageLog">
+            <div class="message">Welcome to the dungeon!</div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+
+</html>
