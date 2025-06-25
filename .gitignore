@@ -1,3 +1,5 @@
 .idea
 db.ini
 .DS_Store
+
+node_modules
