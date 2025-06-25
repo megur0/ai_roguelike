@@ -319,7 +319,7 @@ class Game {
   setupGamepad() {
     const dpadInner = document.getElementById("dpad-inner");
     const dpadStick = document.getElementById("dpad-stick");
-    
+
     if (!dpadInner || !dpadStick) return;
 
     let isDragging = false;
@@ -344,11 +344,11 @@ class Game {
     const handleStart = (e) => {
       e.preventDefault();
       isDragging = true;
-      
+
       const touch = e.touches ? e.touches[0] : e;
       startPos.x = touch.clientX;
       startPos.y = touch.clientY;
-      
+
       dpadStick.classList.add("active");
       updateCenterPos();
     };
@@ -360,28 +360,28 @@ class Game {
       const touch = e.touches ? e.touches[0] : e;
       const deltaX = touch.clientX - centerPos.x;
       const deltaY = touch.clientY - centerPos.y;
-      
+
       // Limit stick movement to circle boundary
       const maxDistance = 30; // Maximum stick movement from center
       const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-      
+
       let finalX = deltaX;
       let finalY = deltaY;
-      
+
       if (distance > maxDistance) {
         finalX = (deltaX / distance) * maxDistance;
         finalY = (deltaY / distance) * maxDistance;
       }
-      
+
       // Update stick position
       dpadStick.style.transform = `translate(calc(-50% + ${finalX}px), calc(-50% + ${finalY}px))`;
-      
+
       // Check for movement commands
       const now = Date.now();
       if (now - lastMoveTime > moveDelay && distance > moveThreshold) {
         const angle = Math.atan2(deltaY, deltaX);
         const direction = this.getDirectionFromAngle(angle);
-        
+
         if (direction) {
           this.movePlayer(direction);
           lastMoveTime = now;
@@ -392,10 +392,10 @@ class Game {
     const handleEnd = (e) => {
       if (!isDragging) return;
       e.preventDefault();
-      
+
       isDragging = false;
       dpadStick.classList.remove("active");
-      
+
       // Reset stick position
       dpadStick.style.transform = "translate(-50%, -50%)";
     };
@@ -413,8 +413,8 @@ class Game {
 
   getDirectionFromAngle(angle) {
     // Convert radians to degrees and normalize
-    let degrees = (angle * 180 / Math.PI + 360) % 360;
-    
+    let degrees = ((angle * 180) / Math.PI + 360) % 360;
+
     // Define direction ranges (45 degrees each)
     if (degrees >= 315 || degrees < 45) {
       return "right";
@@ -425,7 +425,7 @@ class Game {
     } else if (degrees >= 225 && degrees < 315) {
       return "up";
     }
-    
+
     return null;
   }
 
